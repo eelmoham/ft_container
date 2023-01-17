@@ -4,179 +4,186 @@
 #include <iostream>
 
 template <typename T>
-class vector
+class Vector
 {
     private:
         T *data;
-        size_t size;
-        size_t capacity;
-
+        size_t _size;
+        size_t _capacity;
     public:
-        vector():size(0), capacity(0){}
-        vector(size_t n):size(n), capacity(0)
+        Vector():_size(0), _capacity(0){std::cout<< "Vector" << std::endl;}
+        Vector(size_t n):_size(n), _capacity(0)
         {
-            this->data = new(std::nothrow) data[n];
+            this->data = new(std::nothrow) T[n];
             if (!this->data)
-                throw badAlloc();
+                throw std::exception();
         }
-        vector(size_t n, const T &val):size(n), capacity(n)
+        Vector(size_t n, const T &val):_size(n), _capacity(n)
         {
-            this->data = new(std::nothrow) data[n];
+            this->data = new(std::nothrow) T[n];
             if (!this->data)
-                throw badAlloc();
-            for (size_t i = 0; i < n: i++)
+                throw std::exception();
+            for(size_t i = 0; i < n; i++)
                 this->data[i] = val;
         }
-        vector(const vector &cpy)
+        Vector(const Vector &cpy)
         {
-            this->size = cpy.size();
-            this->capacity = cpy.capacity();
-            for(size_t i = 0; i < this->size(); i++)
+            this->_size = cpy.size();
+            this->_capacity = cpy.capacity();
+            this->data = new T[cpy.size()];
+            if (!this->data)
+                throw std::exception();
+            for(size_t i = 0; i < this->_size; i++)
                 this->data[i] = cpy[i];
         }
-        ~vector()
+        ~Vector()
         {
             if (this->data != nullptr)
-                delete[] this->data
+                delete[] this->data;
         }
         
-        T &operator=(const vector &rhs)
+        T &operator=(const Vector &rhs)
         {
-            this->size = rhs.size();
-            this->capacity = rhs.capacity();
-            for(size_t i = 0; i < this->size(); i++)
+            this->_size = rhs.size();
+            this->_capacity = rhs.capacity();
+            if (this->data)
+                delete[] this->data;
+            this->data = new T[rhs.size()];
+            if (!this->data)
+                throw std::exception();
+            for(size_t i = 0; i < this->_size(); i++)
                 this->data[i] = rhs[i];
             return (*this);
         }
 
         T &operator[](size_t index)
         {
-            if (index < 0 || index > this->size)
-                throw out_of_range();
+            if (index < 0 || index > this->_size)
+                throw std::exception();
             else
                 return this->data[index];
         }
         
-        const T &operator[](size_t i) const
+        const T &operator[](size_t index) const
         {
-            if (index < 0 || index > this->size)
-                throw out_of_range();
+            if (index < 0 || index > this->_size)
+                throw std::exception();
             else
                 return this->data[index];
         }
         
         T &at(size_t index)
         {
-            if (index < 0 || index > this->size)
-                throw out_of_range();
+            if (index < 0 || index > this->_size)
+                throw std::exception();
             else
-                return this->data[i];
+                return this->data[index];
         }
 
-        const T &at(size_t i) const
+        const T &at(size_t index) const
         {
-            if (index < 0 || index > this->size)
-                throw out_of_range();
+            if (index < 0 || index > this->_size)
+                throw std::exception();
             else
-                return this->data[i];
+                return this->data[index];
         }
 
         T &front()
         {
             if (this->size() < 1)
-                throw out_of_range();
+                throw std::exception();
             return this->data[0];
         }
 
         const T &front() const
         {
             if (this->size() < 1)
-                throw out_of_range();
+                throw std::exception();
             return this->data[0];
         }
         T &back()
         {
-            if (this->data[this->size - 1])
-                return this->data[this->size - 1]
+            if (this->data[this->_size - 1])
+                return this->data[this->_size - 1];
             else
-                throw out_of_range();
+                throw std::exception();
         }
         const T &back() const
         {
-            if (this->data[this->size - 1])
-                return this->data[this->size - 1]
+            if (this->data[this->_size - 1])
+                return this->data[this->_size - 1];
             else
-                throw out_of_range();
+                throw std::exception();
         }
 
         // // Iterators
         T *begin()
         {
-            if (this->size())
+            if (this->_size)
             {
                 std::iterator<std::random_access_iterator_tag, T> *it;
                 it = this->data;
                 return it;
             }
             else
-                throw empty_vector();
+                throw std::exception();
         }
         const T *begin() const
         {
-            if (this->size())
+            if (this->_size)
             {
                 std::iterator<std::random_access_iterator_tag, T> *it;
                 it = this->data;
                 return it;
             }
             else
-                throw empty_vector();
+                throw std::exception();
         }
         
         T *end()
         {
-            if (this->size())
+            if (this->_size)
             {
                 std::iterator<std::random_access_iterator_tag, T> *it;
                 it = this->data;
-                it+=this->size();
+                it+=this->_size;
                 return it;
             }
             else
-                throw empty_vector();
+                throw std::exception();
         }
         const T *cend() const
         {
-            if (this->size())
+            if (this->_size)
             {
                 std::iterator<std::random_access_iterator_tag, T> *it;
                 it = this->data;
-                it+=this->size();
+                it+=this->_size;
                 return it;
                 return it;
             }
             else
-                throw empty_vector();
+                throw std::exception();
         }
 
         // // Capacity
         bool empty() const
         {
-            if(this->size())
+            if(this->_size)
                 return false;
             else
-                true;
+                return true;
         }
         size_t size() const{
-            return this->size;
+            return this->_size;
         }
         size_t capacity() const{
-            return this->capacity;
+            return this->_capacity;
         }
-        void reserve(size_t n);
-        {
-            
-        }
+        // void reserve(size_t n);
+        // {
+
+        // }
         // void shrink_to_fit();
 
         // // Modifiers
@@ -189,32 +196,32 @@ class vector
         // void resize(size_t n, const T &val);
 
 
-        class badAlloc() : public std::exception
-        {
-            public:
-    		    virtual const char* what() const throw()
-                {
-                    std::cout << "bad allocation" << std::endl;
-                }
-        }
+        // class badAlloc() : public std::exception
+        // {
+        //     public:
+    	// 	    virtual const char* what() const throw()
+        //         {
+        //             std::cout << "bad allocation" << std::endl;
+        //         }
+        // }
 
-        class out_of_range() : public std::exception
-        {
-            public:
-    		    virtual const char* what() const throw()
-                {
-                    std::cout << "out of range" << std::endl;
-                }
-        }
+        // class out_of_range : public std::exception
+        // {
+        //     public:
+    	// 	    virtual const char* what() const throw()
+        //         {
+        //             std::cout << "out of range" << std::endl;
+        //         }
+        // }
 
-        class empty_vector() : public std::exception
-        {
-            public:
-    		    virtual const char* what() const throw()
-                {
-                    std::cout << "vector is empty" << std::endl;
-                }
-        }
+        // class empty_Vector() : public std::exception
+        // {
+        //     public:
+    	// 	    virtual const char* what() const throw()
+        //         {
+        //             std::cout << "Vector is empty" << std::endl;
+        //         }
+        // }
 };
 
 #endif
