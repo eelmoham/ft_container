@@ -114,7 +114,7 @@ class vector
         {
             if (this->size())
             {
-                std::iterator<std::random_access_iterator_tag, T> it;
+                std::iterator<std::random_access_iterator_tag, T> *it;
                 it = this->data;
                 return it;
             }
@@ -125,7 +125,7 @@ class vector
         {
             if (this->size())
             {
-                std::iterator<std::random_access_iterator_tag, T> it;
+                std::iterator<std::random_access_iterator_tag, T> *it;
                 it = this->data;
                 return it;
             }
@@ -137,25 +137,46 @@ class vector
         {
             if (this->size())
             {
-                std::iterator<std::random_access_iterator_tag, T> it;
+                std::iterator<std::random_access_iterator_tag, T> *it;
                 it = this->data;
-                while (it++);            
+                it+=this->size();
                 return it;
             }
             else
                 throw empty_vector();
         }
-        // const T *cend() const;
+        const T *cend() const
+        {
+            if (this->size())
+            {
+                std::iterator<std::random_access_iterator_tag, T> *it;
+                it = this->data;
+                it+=this->size();
+                return it;
+                return it;
+            }
+            else
+                throw empty_vector();
+        }
 
         // // Capacity
-        // bool empty() const;
+        bool empty() const
+        {
+            if(this->size())
+                return false;
+            else
+                true;
+        }
         size_t size() const{
             return this->size;
         }
         size_t capacity() const{
             return this->capacity;
         }
-        // void reserve(size_t n);
+        void reserve(size_t n);
+        {
+            
+        }
         // void shrink_to_fit();
 
         // // Modifiers
