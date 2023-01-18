@@ -10,48 +10,49 @@ class Vector
         T *data;
         size_t _size;
         size_t _capacity;
+        std::allocator<T> alloc;
     public:
         Vector():_size(0), _capacity(0){std::cout<< "Vector" << std::endl;}
+
         Vector(size_t n):_size(n), _capacity(0)
         {
-            this->data = new(std::nothrow) T[n];
-            if (!this->data)
-                throw std::exception();
+            this->data = alloc.allocate(n);//throw exception
+            for (size_t i = 0; i < this->size; i++)
+                this->alloc.construct(this->data + i, )
+            
         }
+
         Vector(size_t n, const T &val):_size(n), _capacity(n)
         {
             this->data = new(std::nothrow) T[n];
-            if (!this->data)
-                throw std::exception();
             for(size_t i = 0; i < n; i++)
                 this->data[i] = val;
         }
+
         Vector(const Vector &cpy)
         {
             this->_size = cpy.size();
             this->_capacity = cpy.capacity();
-            this->data = new T[cpy.size()];
-            if (!this->data)
-                throw std::exception();
+            this->data = alloc.allocate(cpy.size());//throw exception
             for(size_t i = 0; i < this->_size; i++)
                 this->data[i] = cpy[i];
         }
+        
         ~Vector()
         {
+            // std::cout << "done" << std::endl;
             if (this->data != nullptr)
-                delete[] this->data;
+                this->alloc.deallocate(this->data, this->size());
         }
         
-        T &operator=(const Vector &rhs)
+        Vector &operator=(const Vector &rhs)
         {
             this->_size = rhs.size();
             this->_capacity = rhs.capacity();
             if (this->data)
-                delete[] this->data;
-            this->data = new T[rhs.size()];
-            if (!this->data)
-                throw std::exception();
-            for(size_t i = 0; i < this->_size(); i++)
+                this->alloc.deallocate(this->data, this->size());
+            this->data = alloc.allocate(rhs.size());//throw exception
+            for(size_t i = 0; i < this->_size; i++)
                 this->data[i] = rhs[i];
             return (*this);
         }
@@ -174,16 +175,20 @@ class Vector
             else
                 return true;
         }
+
         size_t size() const{
             return this->_size;
         }
+
         size_t capacity() const{
             return this->_capacity;
         }
-        // void reserve(size_t n);
-        // {
 
-        // }
+        void reserve(size_t n)
+        {
+            
+        }
+
         // void shrink_to_fit();
 
         // // Modifiers

@@ -1,20 +1,22 @@
+#include <iostream>
+#include <vector>
 
-#include "vector.hpp"
 void d()
 {
     try
     {
         // Vector<int> v2(5, 1000);
-        Vector<int> v(5);
+        std::vector<int> v(5);
         int i = 0;
         for (i = 0; i < 5; i++)
             v[i] = i;
-        std::cout << v.size()<< std::endl;
-        // v.reserve(10);
+        std::cout << v.capacity()<< std::endl;
+        v.reserve(100);
         v[5] = 1000; 
-        for (int j = 0; j < 10; j++)
+        v[6] = 1000; 
+        for (int j = 0; j < v.capacity(); j++)
             std::cout << v[j] << std::endl;
-        std::cout << v.size()<< std::endl;
+        std::cout << v.capacity()<< std::endl;
     }
     catch(...)
     {
