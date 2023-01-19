@@ -6,12 +6,12 @@ void d()
     try
     {
         // Vector<int> v2(5, 1000);
-        std::vector<int> v(5);
+        std::vector<int> v(5 , 99);
         int i = 0;
         for (i = 0; i < 5; i++)
             v[i] = i;
         std::cout << v.capacity()<< std::endl;
-        v.reserve(100);
+        v.reserve(10);
         v[5] = 1000; 
         v[6] = 1000; 
         for (int j = 0; j < v.capacity(); j++)
