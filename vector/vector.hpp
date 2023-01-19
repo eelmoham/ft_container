@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-template <typename T>
+template<class T>
 class vector
 {
     private:
@@ -14,10 +14,10 @@ class vector
     public:
         vector():_size(0), _capacity(0)
         {
-            this->data = NULL;
+            // this->data = NULL;
         }
 
-        vector(size_t n):_size(n), _capacity(0)
+        vector(size_t n):_size(n), _capacity(n)
         {
             this->data = alloc.allocate(n);//throw exception
             // for (size_t i = 0; i < this->_size; i++)
@@ -190,7 +190,11 @@ class vector
 
         void reserve(size_t n)
         {
-            if (n < this->_size)
+            if (this->_size == 0 && this->_capacity == 0)
+            {
+                this->data = alloc.allocate(n);
+            }
+            else if (n < this->_size)
             {
                 for (size_t i = n; i < this->_size; i++)
                     this->alloc.destroy(this->data + i);
@@ -212,17 +216,37 @@ class vector
                 }
                 this->alloc.deallocate(tmp, n);
             }
-            this->_size = n;
-            this->_capacity = n;
         }
 
-        // void shrink_to_fit();
+        void shrink_to_fit()
+        {
+            if (this->_capacity > this->_size)
+            {
+                for (size_t i = this->_size; i < this->_capacity; i++)
+                    this->alloc.destroy(this->data + i);
+            }
+            this->_capacity = this->_size;
+        }
 
         // // Modifiers
-        // void clear();
+        void clear()
+        {
+            for (size_t i = 0; i < this->_size;i++)
+                this->alloc.destroy(this->data + i);
+            this->_size = 0;
+        }
         // void insert(size_t i, const T &val);
         // void erase(size_t i);
-        // void push_back(const T &val);
+        void push_back(const T &val)
+        {
+            this->reserve(this->_size + 1);
+            this->_size++;
+            if(!this->_capacity)
+                this->_capacity++;
+            else if (this->_capacity < this->_size)
+                this->_capacity *= 2;
+            this->alloc.construct(this->data + _size - 1, val);
+        }
         // void pop_back();
         // void resize(size_t n);
         // void resize(size_t n, const T &val);
@@ -257,3 +281,20 @@ class vector
 };
 
 #endif
+
+
+
+/*
+vector( size_type count, const T& value, const Allocator& alloc = Allocator());
+
+template< class InputIt >
+vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
+
+vector( const vector& other, const Allocator& alloc );
+
+vector( vector&& other );
+
+vector( vector&& other, const Allocator& alloc );
+
+vector( std::initializer_list<T> init, const Allocator& alloc = Allocator() );
+*/

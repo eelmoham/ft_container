@@ -1,29 +1,35 @@
 
 #include "vector.hpp"
-void d()
+
+int s()
 {
-    try
-    {
-        // vector<int> v2(5, 1000);
-        vector<std::string> v(5);
-        int i = 0;
-        for (i = 0; i < 5; i++)
-            v[i] = "mehdi ";
-        std::cout << v.size() << std::endl;
-        v.reserve(2);
-        for (int j = 0; j < v.size(); j++)
-            std::cout << v[j] << std::endl;
-        std::cout << v.size() << std::endl;
-    }
-    catch (...)
-    {
-        std::cout << "catch" << std::endl;
-    }
-    {
-        system("leaks a.out");
-    }
+  vector<std::string> s;
+  std::cout << "c " << s.capacity() << " s : "<< s.size()<<std::endl;
+  s.push_back("mehdi");
+  s.push_back("mehdi2");
+  s.push_back("mehdi2");
+  s.push_back("mehdi2");
+  s.push_back("mehdi2");
+  s.push_back("mehdi2");
+  s.push_back("mehdi2");
+  s.push_back("mehdi2");
+  s.push_back("mehdi2");
+  for (size_t i = 0; i < s.size(); i++)
+    std::cout <<"value : "<< s[i]<<std::endl;
+  s.clear();
+  s.push_back("***************");
+  for (size_t i = 0; i < s.size(); i++)
+    std::cout <<"value : "<< s[i]<<std::endl;
+  std::cout << "c " << s.capacity() << " s : "<< s.size()<<std::endl;
+  return 0;
 }
-int main()
+
+int main ()
 {
-    d();
+  {s();
+  }
+  {
+    system("leaks a.out");
+  }
+  return 0;
 }
