@@ -4,7 +4,7 @@
 #include <iostream>
 
 template <typename T>
-class Vector
+class vector
 {
     private:
         T *data;
@@ -12,40 +12,44 @@ class Vector
         size_t _capacity;
         std::allocator<T> alloc;
     public:
-        Vector():_size(0), _capacity(0){std::cout<< "Vector" << std::endl;}
+        vector():_size(0), _capacity(0)
+        {
+            this->data = NULL;
+        }
 
-        Vector(size_t n):_size(n), _capacity(0)
+        vector(size_t n):_size(n), _capacity(0)
         {
             this->data = alloc.allocate(n);//throw exception
-            for (size_t i = 0; i < this->size; i++)
-                this->alloc.construct(this->data + i, )
-            
+            // for (size_t i = 0; i < this->_size; i++)
+            //     this->alloc.construct(this->data,this->data + i);            
         }
 
-        Vector(size_t n, const T &val):_size(n), _capacity(n)
+        vector(size_t n, const T &val):_size(n), _capacity(n)
         {
             this->data = new(std::nothrow) T[n];
-            for(size_t i = 0; i < n; i++)
-                this->data[i] = val;
+            for (size_t i = 0; i < this->size; i++)
+                this->alloc.construct( this->data + i, val);
         }
 
-        Vector(const Vector &cpy)
+        vector(const vector &cpy)
         {
             this->_size = cpy.size();
             this->_capacity = cpy.capacity();
             this->data = alloc.allocate(cpy.size());//throw exception
+            for (size_t i = 0; i < this->size; i++)
+                this->alloc.construct(this->data + i, this->end());
             for(size_t i = 0; i < this->_size; i++)
-                this->data[i] = cpy[i];
+                this->alloc.construct( this->data + i, cpy[i]);
         }
         
-        ~Vector()
+        ~vector()
         {
             // std::cout << "done" << std::endl;
             if (this->data != nullptr)
                 this->alloc.deallocate(this->data, this->size());
         }
         
-        Vector &operator=(const Vector &rhs)
+        vector &operator=(const vector &rhs)
         {
             this->_size = rhs.size();
             this->_capacity = rhs.capacity();
@@ -53,7 +57,7 @@ class Vector
                 this->alloc.deallocate(this->data, this->size());
             this->data = alloc.allocate(rhs.size());//throw exception
             for(size_t i = 0; i < this->_size; i++)
-                this->data[i] = rhs[i];
+                this->alloc.construct( this->data + i, rhs[i]);
             return (*this);
         }
 
@@ -153,7 +157,7 @@ class Vector
             else
                 throw std::exception();
         }
-        const T *cend() const
+        const T *end() const
         {
             if (this->_size)
             {
@@ -186,7 +190,30 @@ class Vector
 
         void reserve(size_t n)
         {
-            
+            if (n < this->_size)
+            {
+                for (size_t i = n; i < this->_size; i++)
+                    this->alloc.destroy(this->data + i);
+            }
+            else
+            {
+                T *tmp = this->alloc.allocate(n);
+                for (size_t i = 0; i < this->_size; i++)
+                {
+                    this->alloc.construct(tmp + i, this->data[i]);
+                    this->alloc.destroy(this->data + i);
+                }
+                this->alloc.deallocate(this->data, this->size());
+                this->data = this->alloc.allocate(n);
+                for (size_t i = 0; i < n; i++)
+                {
+                    this->alloc.construct(this->data + i, tmp[i]);
+                    this->alloc.destroy(tmp + i);
+                }
+                this->alloc.deallocate(tmp, n);
+            }
+            this->_size = n;
+            this->_capacity = n;
         }
 
         // void shrink_to_fit();
@@ -219,12 +246,12 @@ class Vector
         //         }
         // }
 
-        // class empty_Vector() : public std::exception
+        // class empty_vector() : public std::exception
         // {
         //     public:
     	// 	    virtual const char* what() const throw()
         //         {
-        //             std::cout << "Vector is empty" << std::endl;
+        //             std::cout << "vector is empty" << std::endl;
         //         }
         // }
 };
