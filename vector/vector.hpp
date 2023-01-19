@@ -235,7 +235,14 @@ class vector
                 this->alloc.destroy(this->data + i);
             this->_size = 0;
         }
-        // void insert(size_t i, const T &val);
+        void insert(size_t i, const T &val)
+        {
+            if (this->data[i])
+            {
+                this->alloc.destroy(this->data + i);
+                this->alloc.allocate(this->data + i, val);
+            }
+        }
         // void erase(size_t i);
         void push_back(const T &val)
         {
