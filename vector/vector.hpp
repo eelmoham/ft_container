@@ -129,9 +129,9 @@ namespace ft
         {
             if (this->_size)
             {
-                std::iterator<std::random_access_iterator_tag, T> *it;
-                it = this->data;
-                return it;
+                // std::iterator<std::random_access_iterator_tag, T> *it;
+                // it = this->data;
+                return &this->data;
             }
             else
                 throw std::exception();
@@ -148,18 +148,19 @@ namespace ft
         //         throw std::exception();
         // }
 
-        // std::iterator<std::random_access_iterator_tag, T> *end()
-        // {
-        //     if (this->_size)
-        //     {
-        //         std::iterator<std::random_access_iterator_tag, T> *it;
-        //         it = this->data;
-        //         it += this->_size;
-        //         return it;
-        //     }
-        //     else
-        //         throw std::exception();
-        // }
+        std::iterator<std::random_access_iterator_tag, T> *end()
+        {
+            if (this->_size)
+            {
+                // std::iterator<std::random_access_iterator_tag, T> *it;
+                // it = this->data;
+                // it += this->_size;
+                // return it;
+                return &(this->data + this->_size -1);
+            }
+            else
+                throw std::exception();
+        }
 
         // std::iterator<std::random_access_iterator_tag, T> end() const
         // {
