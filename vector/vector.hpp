@@ -3,63 +3,64 @@
 
 #include <iostream>
 
-namespace ft 
+namespace ft
 {
-    template<class T>
-class vector
-{
+    template <class T>
+    class vector
+    {
     private:
         T *data;
         size_t _size;
         size_t _capacity;
         std::allocator<T> alloc;
+
     public:
-        vector():_size(0), _capacity(0)
+        vector() : _size(0), _capacity(0)
         {
             // this->data = NULL;
         }
 
-        vector(size_t n):_size(n), _capacity(n)
+        vector(size_t n) : _size(n), _capacity(n)
         {
-            this->data = alloc.allocate(n);//throw exception
+            this->data = alloc.allocate(n); // throw exception
             // for (size_t i = 0; i < this->_size; i++)
-            //     this->alloc.construct(this->data,this->data + i);            
+            //     this->alloc.construct(this->data,this->data + i);
         }
 
-        vector(size_t n, const T &val):_size(n), _capacity(n)
+        vector(size_t n, const T &val) : _size(n), _capacity(n)
         {
-            this->data = new(std::nothrow) T[n];
-            for (size_t i = 0; i < this->size; i++)
-                this->alloc.construct( this->data + i, val);
+            this->data = new (std::nothrow) T[n];
+            for (size_t i = 0; i < this->_size; i++)
+                this->alloc.construct(this->data + i, val);
         }
 
         vector(const vector &cpy)
         {
             this->_size = cpy.size();
             this->_capacity = cpy.capacity();
-            this->data = alloc.allocate(cpy.size());//throw exception
-            for (size_t i = 0; i < this->size; i++)
+            this->data = alloc.allocate(cpy.size()); // throw exception
+            for (size_t i = 0; i < this->_size; i++)
                 this->alloc.construct(this->data + i, this->end());
-            for(size_t i = 0; i < this->_size; i++)
-                this->alloc.construct( this->data + i, cpy[i]);
+            for (size_t i = 0; i < this->_size; i++)
+                this->alloc.construct(this->data + i, cpy[i]);
         }
-        
+
         ~vector()
         {
             // std::cout << "done" << std::endl;
             if (this->data != nullptr)
                 this->alloc.deallocate(this->data, this->size());
         }
-        
+
         vector &operator=(const vector &rhs)
         {
             this->_size = rhs.size();
             this->_capacity = rhs.capacity();
             if (this->data)
                 this->alloc.deallocate(this->data, this->size());
-            this->data = alloc.allocate(rhs.size());//throw exception
-            for(size_t i = 0; i < this->_size; i++)
-                this->alloc.construct( this->data + i, rhs[i]);
+            this->data = alloc.allocate(rhs.size()); // throw exception
+            for (size_t i = 0; i < this->_size; i++)
+                this->alloc.construct(this->data + i, rhs[i]);
             return (*this);
         }
 
@@ -70,7 +71,7 @@ class vector
             else
                 return this->data[index];
         }
-        
+
         const T &operator[](size_t index) const
         {
             if (index < 0 || index > this->_size)
@@ -78,7 +79,7 @@ class vector
             else
                 return this->data[index];
         }
-        
+
         T &at(size_t index)
         {
             if (index < 0 || index > this->_size)
@@ -124,7 +125,7 @@ class vector
         }
 
         // // Iterators
-        T *begin()
+        std::iterator<std::random_access_iterator_tag, T> *begin()
         {
             if (this->_size)
             {
@@ -135,58 +136,60 @@ class vector
             else
                 throw std::exception();
         }
-        const T *begin() const
-        {
-            if (this->_size)
-            {
-                std::iterator<std::random_access_iterator_tag, T> *it;
-                it = this->data;
-                return it;
-            }
-            else
-                throw std::exception();
-        }
-        
-        T *end()
-        {
-            if (this->_size)
-            {
-                std::iterator<std::random_access_iterator_tag, T> *it;
-                it = this->data;
-                it+=this->_size;
-                return it;
-            }
-            else
-                throw std::exception();
-        }
-        const T *end() const
-        {
-            if (this->_size)
-            {
-                std::iterator<std::random_access_iterator_tag, T> *it;
-                it = this->data;
-                it+=this->_size;
-                return it;
-                return it;
-            }
-            else
-                throw std::exception();
-        }
+        // const std::iterator<std::random_access_iterator_tag, T> begin() const
+        // {
+        //     if (this->_size)
+        //     {
+        //         std::iterator<std::random_access_iterator_tag, T> *it;
+        //         it = this->data;
+        //         return it;
+        //     }
+        //     else
+        //         throw std::exception();
+        // }
+
+        // std::iterator<std::random_access_iterator_tag, T> *end()
+        // {
+        //     if (this->_size)
+        //     {
+        //         std::iterator<std::random_access_iterator_tag, T> *it;
+        //         it = this->data;
+        //         it += this->_size;
+        //         return it;
+        //     }
+        //     else
+        //         throw std::exception();
+        // }
+
+        // std::iterator<std::random_access_iterator_tag, T> end() const
+        // {
+        //     if (this->_size)
+        //     {
+        //         std::iterator<std::random_access_iterator_tag, T> *it;
+        //         it = this->data;
+        //         it += this->_size;
+        //         return it;
+        //     }
+        //     else
+        //         throw std::exception();
+        // }
 
         // // Capacity
         bool empty() const
         {
-            if(this->_size)
+            if (this->_size)
                 return false;
             else
                 return true;
         }
 
-        size_t size() const{
+        size_t size() const
+        {
             return this->_size;
         }
 
-        size_t capacity() const{
+        size_t capacity() const
+        {
             return this->_capacity;
         }
 
@@ -233,11 +236,11 @@ class vector
         // // Modifiers
         void clear()
         {
-            for (size_t i = 0; i < this->_size;i++)
+            for (size_t i = 0; i < this->_size; i++)
                 this->alloc.destroy(this->data + i);
             this->_size = 0;
         }
-        
+
         void insert(size_t i, const T &val)
         {
             if (this->data[i])
@@ -251,7 +254,7 @@ class vector
         {
             this->reserve(this->_size + 1);
             this->_size++;
-            if(!this->_capacity)
+            if (!this->_capacity)
                 this->_capacity++;
             else if (this->_capacity < this->_size)
                 this->_capacity *= 2;
@@ -261,11 +264,10 @@ class vector
         // void resize(size_t n);
         // void resize(size_t n, const T &val);
 
-
         // class badAlloc() : public std::exception
         // {
         //     public:
-    	// 	    virtual const char* what() const throw()
+        // 	    virtual const char* what() const throw()
         //         {
         //             std::cout << "bad allocation" << std::endl;
         //         }
@@ -274,7 +276,7 @@ class vector
         // class out_of_range : public std::exception
         // {
         //     public:
-    	// 	    virtual const char* what() const throw()
+        // 	    virtual const char* what() const throw()
         //         {
         //             std::cout << "out of range" << std::endl;
         //         }
@@ -283,17 +285,15 @@ class vector
         // class empty_vector() : public std::exception
         // {
         //     public:
-    	// 	    virtual const char* what() const throw()
+        // 	    virtual const char* what() const throw()
         //         {
         //             std::cout << "vector is empty" << std::endl;
         //         }
         // }
+    };
 };
-}
 
 #endif
-
-
 
 /*
 vector( size_type count, const T& value, const Allocator& alloc = Allocator());
