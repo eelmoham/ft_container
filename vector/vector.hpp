@@ -3,7 +3,9 @@
 
 #include <iostream>
 
-template<class T>
+namespace ft 
+{
+    template<class T>
 class vector
 {
     private:
@@ -235,6 +237,7 @@ class vector
                 this->alloc.destroy(this->data + i);
             this->_size = 0;
         }
+        
         void insert(size_t i, const T &val)
         {
             if (this->data[i])
@@ -286,6 +289,7 @@ class vector
         //         }
         // }
 };
+}
 
 #endif
 
