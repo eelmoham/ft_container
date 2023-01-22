@@ -1,12 +1,9 @@
 #include "vector.hpp"
 
-
-
-int main()
-{
-    ft::vector<int> v(5,42);
-    // std::cout << *v.begin() << std::endl;
-    for(std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
-        std::cout << *it << std::endl;
+int main() {
+    ft::vector<int> vec(5, 42);
+    for (iterator<int> it = vec.begin(); it != vec.end(); ++it) {
+        std::cout << *it << " ";
+    }
     return 0;
 }

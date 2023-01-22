@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include "iterator.hpp"
 
 namespace ft
 {
@@ -125,55 +126,36 @@ namespace ft
         }
 
         // // Iterators
-        std::iterator<std::random_access_iterator_tag, T> *begin()
+        iterator<T> begin()
         {
             if (this->_size)
-            {
-                // std::iterator<std::random_access_iterator_tag, T> *it;
-                // it = this->data;
-                return &this->data;
-            }
+                return VectorIterator<T>(this->data, 0);
             else
                 throw std::exception();
         }
-        // const std::iterator<std::random_access_iterator_tag, T> begin() const
-        // {
-        //     if (this->_size)
-        //     {
-        //         std::iterator<std::random_access_iterator_tag, T> *it;
-        //         it = this->data;
-        //         return it;
-        //     }
-        //     else
-        //         throw std::exception();
-        // }
-
-        std::iterator<std::random_access_iterator_tag, T> *end()
+        const iterator<T> cbegin()
         {
             if (this->_size)
-            {
-                // std::iterator<std::random_access_iterator_tag, T> *it;
-                // it = this->data;
-                // it += this->_size;
-                // return it;
-                return &(this->data + this->_size -1);
-            }
+                return VectorIterator<T>(this->data, 0);
             else
                 throw std::exception();
         }
 
-        // std::iterator<std::random_access_iterator_tag, T> end() const
-        // {
-        //     if (this->_size)
-        //     {
-        //         std::iterator<std::random_access_iterator_tag, T> *it;
-        //         it = this->data;
-        //         it += this->_size;
-        //         return it;
-        //     }
-        //     else
-        //         throw std::exception();
-        // }
+        iterator<T> end()
+        {
+            if (this->_size)
+                return VectorIterator<T>(this->data, this->_size);
+            else
+                throw std::exception();
+        }
+
+        const iterator<T> cend()
+        {
+            if (this->_size)
+                return VectorIterator<T>(this->data, this->_size);
+            else
+                throw std::exception();
+        }
 
         // // Capacity
         bool empty() const
