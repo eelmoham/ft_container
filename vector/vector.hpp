@@ -129,14 +129,14 @@ namespace ft
         iterator<T> begin()
         {
             if (this->_size)
-                return VectorIterator<T>(this->data, 0);
+                return iterator<T>(this->data, 0);
             else
                 throw std::exception();
         }
         const iterator<T> cbegin()
         {
             if (this->_size)
-                return VectorIterator<T>(this->data, 0);
+                return iterator<T>(this->data, 0);
             else
                 throw std::exception();
         }
@@ -144,7 +144,7 @@ namespace ft
         iterator<T> end()
         {
             if (this->_size)
-                return VectorIterator<T>(this->data, this->_size);
+                return iterator<T>(this->data, this->_size);
             else
                 throw std::exception();
         }
@@ -152,7 +152,7 @@ namespace ft
         const iterator<T> cend()
         {
             if (this->_size)
-                return VectorIterator<T>(this->data, this->_size);
+                return iterator<T>(this->data, this->_size);
             else
                 throw std::exception();
         }
@@ -179,12 +179,10 @@ namespace ft
         void reserve(size_t n)
         {
             if (this->_size == 0 && this->_capacity == 0)
-            {
                 this->data = alloc.allocate(n);
-            }
             else if (n < this->_size)
             {
-                for (size_t i = n; i < this->_size; i++)
+                for (size_t i = n; i < this->_capacity; i++)
                     this->alloc.destroy(this->data + i);
             }
             else
@@ -195,14 +193,15 @@ namespace ft
                     this->alloc.construct(tmp + i, this->data[i]);
                     this->alloc.destroy(this->data + i);
                 }
-                this->alloc.deallocate(this->data, this->size());
+                // this->alloc.deallocate(this->data, this->size());
+            // puts("seg here\n");
                 this->data = this->alloc.allocate(n);
                 for (size_t i = 0; i < n; i++)
                 {
                     this->alloc.construct(this->data + i, tmp[i]);
                     this->alloc.destroy(tmp + i);
                 }
-                this->alloc.deallocate(tmp, n);
+                // this->alloc.deallocate(tmp, n);
             }
         }
 
@@ -236,12 +235,10 @@ namespace ft
         void push_back(const T &val)
         {
             this->reserve(this->_size + 1);
+            this->alloc.construct(this->data + this->_size, val);
             this->_size++;
-            if (!this->_capacity)
-                this->_capacity++;
-            else if (this->_capacity < this->_size)
-                this->_capacity *= 2;
-            this->alloc.construct(this->data + _size - 1, val);
+            if (this->_size > this->_capacity)
+                this->_capacity*=2;
         }
         // void pop_back();
         // void resize(size_t n);
