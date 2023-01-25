@@ -1,10 +1,12 @@
 #include <iostream>
 
-template<typename T>
-class iterator : public std::iterator<std::random_access_iterator_tag, T> {
+namespace ft {
+    template<typename T>
+class iterator : public std::iterator<std::random_access_iterator_tag, T> 
+{
 public:
-    typedef std::random_access_iterator_tag iterator_category;
-    typedef T              value_type;
+    // typedef std::random_access_iterator_tag iterator_category;
+    // typedef T              value_type;
     typedef std::ptrdiff_t         difference_type;
     typedef T*                pointer;
     typedef T&              reference;
@@ -91,3 +93,4 @@ private:
     T *vec_;
     int index_;
 };
+}
