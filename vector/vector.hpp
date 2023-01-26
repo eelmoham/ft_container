@@ -16,7 +16,7 @@ namespace ft
         std::allocator<T> alloc;
 
     public:
-        typedef ft::iterator<T> VectorIterator;
+        typedef ft::iterator<T> iterator;
         vector() : _size(0), _capacity(0)
         {
             // this->data = NULL;
@@ -127,33 +127,33 @@ namespace ft
         }
 
         // // Iterators
-        VectorIterator begin()
+        iterator begin()
         {
             if (this->_size)
-                return VectorIterator(this->data, 0);
+                return iterator(this->data, 0);
             else
                 throw std::exception();
         }
-        const VectorIterator cbegin()
+        const iterator cbegin()
         {
             if (this->_size)
-                return VectorIterator(this->data, 0);
-            else
-                throw std::exception();
-        }
-
-        VectorIterator end()
-        {
-            if (this->_size)
-                return VectorIterator(this->data, this->_size);
+                return iterator(this->data, 0);
             else
                 throw std::exception();
         }
 
-        const VectorIterator cend()
+        iterator end()
         {
             if (this->_size)
-                return VectorIterator(this->data, this->_size);
+                return iterator(this->data, this->_size);
+            else
+                throw std::exception();
+        }
+
+        const iterator cend()
+        {
+            if (this->_size)
+                return iterator(this->data, this->_size);
             else
                 throw std::exception();
         }
@@ -226,31 +226,108 @@ namespace ft
             this->_size = 0;
         }
 
-        void insert(VectorIterator it, const T &val)
+        iterator insert(iterator it, const T &val)
         {
-            std::cout << this->_size << " * " << this->_capacity << std::endl;
             T *tmp = this->alloc.allocate(_size);
             for (size_t i = 0; i < this->_size; i++)
             {
                 this->alloc.construct(tmp + i, this->data[i]);
                 this->alloc.destroy(this->data + i);
             }
+            this->alloc.deallocate(this->data, _size);
+            this->_size += 1;
+            if (this->_size > this->_capacity)
+                this->_capacity *= 2;
+            this->data = this->alloc.allocate(_size);
             int index = 0;
-            for (VectorIterator i = this->begin();i != this->end() ;++i)
+            for (iterator i = this->begin(); i != this->end(); ++i)
+            {
+                if (it == i)
+                    *i = val;
+                else
+                {
+                    *i = tmp[index];
+                    index++;
+                    this->alloc.destroy(tmp + index);
+                }
+            }
+            this->alloc.deallocate(tmp, _size - 1);
+            return it;
+        }
+        void insert(iterator it, size_t n, const T &val)
+        {
+            T *tmp = this->alloc.allocate(_size);
+            for (size_t i = 0; i < this->_size; i++)
+            {
+                this->alloc.construct(tmp + i, this->data[i]);
+                this->alloc.destroy(this->data + i);
+            }
+            this->alloc.deallocate(this->data, _size);
+            this->_size += n;
+            if (this->_size > this->_capacity)
+                this->_capacity *= 2;
+            this->data = this->alloc.allocate(_size);
+            int index = 0;
+            for (iterator i = this->begin(); i != this->end(); ++i)
             {
                 if (it == i)
                 {
-                    this->push_back(tmp[index]);
-                    ++it;
-                    it = val;
+                    for (size_t j = 0; j < n; j++)
+                    {
+                        *i = val;
+                        if (j < n - 1)
+                            ++i;
+                    }
+                    continue;
                 }
                 else
                 {
-                    this->push_back(tmp[index]);
+                    *i = tmp[index];
                     index++;
+                    this->alloc.destroy(tmp + index);
                 }
             }
+            this->alloc.deallocate(tmp, _size - n);
         }
+
+        template <class InputIterator>
+        void insert(iterator position, InputIterator first, InputIterator last)
+        {
+            // Calculate the number of elements to insert
+            size_type numElements = std::distance(first, last);
+
+            // Check if there is enough capacity to insert the new elements
+            if (size + numElements > capacity)
+            {
+                // Allocate new memory and copy the data
+                size_type newCapacity = size + numElements;
+                T *newData = new T[newCapacity];
+                std::copy(data, data + position, newData);
+                std::copy(first, last, newData + position);
+                std::copy(data + position, data + size, newData + position + numElements);
+
+                // Deallocate the old memory and update the data pointer
+                delete[] data;
+                data = newData;
+                capacity = newCapacity;
+            }
+            else
+            {
+                // Make room for the new elements
+                for (iterator it = end() - 1; it >= position; --it)
+                {
+                    *(it + numElements) = *it;
+                }
+
+                // Insert the new elements
+                for (iterator it = position; it < position + numElements; ++it, ++first)
+                {
+                    *it = *first;
+                }
+            }
+            size += numElements;
+        }
+
         // void erase(size_t i);
         void push_back(const T &val)
         {
@@ -268,17 +345,17 @@ namespace ft
 
 #endif
 
-    /*
-    vector( size_type count, const T& value, const Allocator& alloc = Allocator());
+/*
+vector( size_type count, const T& value, const Allocator& alloc = Allocator());
 
-    template< class InputIt >
-    vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
+template< class InputIt >
+vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
 
-    vector( const vector& other, const Allocator& alloc );
+vector( const vector& other, const Allocator& alloc );
 
-    vector( vector&& other );
+vector( vector&& other );
 
-    vector( vector&& other, const Allocator& alloc );
+vector( vector&& other, const Allocator& alloc );
 
-    vector( std::initializer_list<T> init, const Allocator& alloc = Allocator() );
-    */
+vector( std::initializer_list<T> init, const Allocator& alloc = Allocator() );
+*/

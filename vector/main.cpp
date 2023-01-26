@@ -1,28 +1,44 @@
-#include "vector.hpp"
-#include <iostream>
+// #include "vector.hpp"
+// #include <iostream>
 // #include <vector>
-void s()
-{
-    ft::vector<std::string> v(5, "5");
-    v.push_back("5sfv");
-    v.push_back("5sfv");
-    v.push_back("5sfv");
-    v.push_back("5sfv");
-    v.push_back("5sfv");
-    ft::vector<std::string>::VectorIterator iter = v.begin();
-    v.insert(iter + 6, "**********");
-    for(ft::vector<std::string>::VectorIterator it = v.begin(); it != v.end(); ++it)
-        std::cout << *it << std::endl;
-    std::cout << v.capacity() << "  " << v.size() << std::endl;
-}
+// void s()
+// {
+//     ft::vector<int> myVec;
+//     myVec.push_back(1);
+//     myVec.push_back(2);
+//     myVec.push_back(3);
+//     myVec.push_back(4);
+//     ft::vector<int>::iterator it = myVec.begin() + 2;
+//     it = myVec.insert(it, 5);
+//     ++it;
+//     ++it;
+//     ++it;
+//     std::cout << *it << std::endl;
+//     for (ft::vector<int>::iterator iter = myVec.begin(); iter != myVec.end(); ++iter)
+//         std::cout << *iter << " ";
+// }
+#include "vector.hpp"
+// #include <iostream>
+// #include <vector>
 
 int main()
 {
-    {
-        s();
+    ft::vector<int> sourceVector;
+    sourceVector.push_back(4);
+    sourceVector.push_back(5);
+    sourceVector.push_back(6);
+    ft::vector<int> myVector ;
+    myVector.push_back(1);
+    myVector.push_back(2);
+    myVector.push_back(3);
+    ft::vector<int>::iterator it = myVector.begin() + myVector.size();
+
+    myVector.insert(it, sourceVector.begin() + 1, sourceVector.end());
+
+    for (size_t i = 0;i <  myVector.size();i++) {
+        std::cout << myVector[i] << " ";
     }
-    {
-        // system("leaks a.out");
-    }
+    std::cout<<std::endl;
     return 0;
 }
+
