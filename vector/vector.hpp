@@ -127,14 +127,14 @@ namespace ft
         }
 
         // // Iterators
-        iterator begin()
+        iterator begin() 
         {
             if (this->_size)
                 return iterator(this->data, 0);
             else
                 throw std::exception();
         }
-        const iterator cbegin()
+        const iterator begin() const
         {
             if (this->_size)
                 return iterator(this->data, 0);
@@ -150,7 +150,7 @@ namespace ft
                 throw std::exception();
         }
 
-        const iterator cend()
+        const iterator end() const
         {
             if (this->_size)
                 return iterator(this->data, this->_size);
@@ -293,42 +293,36 @@ namespace ft
         template <class InputIterator>
         void insert(iterator position, InputIterator first, InputIterator last)
         {
-            // Calculate the number of elements to insert
-            size_type numElements = std::distance(first, last);
-
-            // Check if there is enough capacity to insert the new elements
-            if (size + numElements > capacity)
+            InputIterator c = first;
+            size_t counter = 0;
+            while (c++ != last)
+                counter++;
+            T *tmp = alloc.allocate(this->_size + counter);
+            int index = 0;
+            for(iterator it = this->begin() ;it != position;++it)
             {
-                // Allocate new memory and copy the data
-                size_type newCapacity = size + numElements;
-                T *newData = new T[newCapacity];
-                std::copy(data, data + position, newData);
-                std::copy(first, last, newData + position);
-                std::copy(data + position, data + size, newData + position + numElements);
-
-                // Deallocate the old memory and update the data pointer
-                delete[] data;
-                data = newData;
-                capacity = newCapacity;
+                this->alloc.construct(tmp + index, *it);
+                index++;
             }
-            else
+            for(InputIterator it = first; it != last; ++it)
             {
-                // Make room for the new elements
-                for (iterator it = end() - 1; it >= position; --it)
-                {
-                    *(it + numElements) = *it;
-                }
-
-                // Insert the new elements
-                for (iterator it = position; it < position + numElements; ++it, ++first)
-                {
-                    *it = *first;
-                }
+                this->alloc.construct(tmp + index, *it);
+                index++;
             }
-            size += numElements;
+            for(iterator it = position ;it != this->end();++it)
+            {
+                this->alloc.construct(tmp + index, *it);
+                index++;
+            }
+            this->alloc.deallocate(this->data, this->_size);
+            this->_size += counter;
+            this->data = this->alloc.allocate(_size);
+            if (this->_size > this->_capacity)
+                this->_capacity *= 2;
+            for (size_t i = 0;i < this->_size;i++)
+                this->alloc.construct(this->data + i, tmp[i]);
+            this->alloc.deallocate(tmp, _size);
         }
-
-        // void erase(size_t i);
         void push_back(const T &val)
         {
             this->reserve(this->_size + 1);
@@ -337,9 +331,53 @@ namespace ft
             if (this->_size > this->_capacity)
                 this->_capacity *= 2;
         }
-        // void pop_back();
-        // void resize(size_t n);
-        // void resize(size_t n, const T &val);
+        void pop_back()
+        {
+            T *tmp = this->alloc.allocate(_size);
+            for (size_t i = 0; i < this->_size; i++)
+            {
+                this->alloc.construct(tmp + i, this->data[i]);
+                this->alloc.destroy(this->data + i);
+            }
+            this->alloc.deallocate(this->data, this->_size);
+            _size--;
+            this->data = this->alloc.allocate(this->_size);
+            for (size_t i = 0; i < this->_size; i++)
+            {
+                this->alloc.construct(this->data + i, tmp[i]);
+                this->alloc.destroy(tmp + i);
+            }
+            this->alloc.deallocate(tmp, _size + 1);
+        }
+        void resize(size_t n)
+        {
+            for (size_t i = 0 ; i < n;i++)
+                this->pop_back();
+        }
+        void resize(size_t n, const T &val)
+        {
+            this->resize(n);
+            for (size_t i = 0 ; i < this->_size;i++)
+            {
+                this->alloc.destroy(data + i);
+                this->alloc.construct(data + i, val);
+            }
+        }
+        iterator erase( iterator pos )
+        {
+            for (iterator i = this->begin(); i != this->end(); ++i)
+            {
+                if (i == pos)
+                {
+                    while (i != this->end())
+                        i = ++i;
+                    this->pop_back();
+                    break;
+                }
+            }
+            return pos;
+        }
+        iterator erase( iterator first, iterator last );
     };
 };
 
@@ -358,4 +396,35 @@ vector( vector&& other );
 vector( vector&& other, const Allocator& alloc );
 
 vector( std::initializer_list<T> init, const Allocator& alloc = Allocator() );
+*/
+
+
+
+
+
+/*
+
+Here is a list of some of the member functions that are typically declared in the C++ STL vector class:
+
+vector() : constructor, creates an empty vector
+vector(size_type n) : constructor, creates a vector with n elements
+vector(size_type n, const value_type& val) : constructor, creates a vector with n elements, all elements are initialized with val
+vector(InputIterator first, InputIterator last) : constructor, creates a vector with the elements in the range [first, last)
+~vector() : destructor, frees the memory used by the vector
+iterator begin() : returns an iterator pointing to the first element of the vector
+iterator end() : returns an iterator pointing to the one past the last element of the vector
+size_type size() : returns the number of elements in the vector
+size_type max_size() : returns the maximum number of elements that the vector can hold
+void resize(size_type n) : resizes the vector to have n elements
+void resize(size_type n, const value_type& val) : resizes the vector to have n elements, new elements are initialized with val
+void reserve(size_type n) : reserves space for n elements, but does not change the size of the vector
+void push_back(const value_type& val) : adds a new element to the end of the vector
+void pop_back() : removes the last element from the vector
+reference operator[](size_type i) : returns a reference to the i-th element of the vector
+reference at(size_type i) : returns a reference to the i-th element of the vector, throws an exception if i is out of range
+void clear() : removes all elements from the vector
+bool empty() : returns true if the vector is empty, false otherwise
+void swap(vector<value_type>& v) : swaps the contents of the vector with the contents of v
+Note that this is not an exhaustive list of all functions that may be declared in a vector class, as some implementations may have more or less functions. Additionally, the function signature may change based on the specific implementation of vector.
+
 */

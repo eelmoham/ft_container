@@ -1,44 +1,64 @@
-// #include "vector.hpp"
-// #include <iostream>
-// #include <vector>
-// void s()
-// {
-//     ft::vector<int> myVec;
-//     myVec.push_back(1);
-//     myVec.push_back(2);
-//     myVec.push_back(3);
-//     myVec.push_back(4);
-//     ft::vector<int>::iterator it = myVec.begin() + 2;
-//     it = myVec.insert(it, 5);
-//     ++it;
-//     ++it;
-//     ++it;
-//     std::cout << *it << std::endl;
-//     for (ft::vector<int>::iterator iter = myVec.begin(); iter != myVec.end(); ++iter)
-//         std::cout << *iter << " ";
-// }
 #include "vector.hpp"
 // #include <iostream>
 // #include <vector>
+// #include "vector.hpp"
+// void s()
+// {
+//     const ft::vector<std::string> sourceVector(3, "*");
+//     // sourceVector.push_back("4");
+//     // sourceVector.push_back("5");
+//     // sourceVector.push_back("6");
+//     ft::vector<std::string> myVector;
+//     myVector.push_back("1");
+//     myVector.push_back("2");
+//     myVector.push_back("3");
+//     myVector.push_back("3");
+//     myVector.push_back("3");
+//     myVector.push_back("3");
+//     myVector.push_back("3");
+//     ft::vector<std::string>::iterator it = myVector.begin() + myVector.size();
+
+//     myVector.insert(it, sourceVector.begin(), sourceVector.end());
+//     // myVector.pop_back();
+//     for (size_t i = 0; i < myVector.size(); i++)
+//     {
+//         std::cout << myVector[i] << " ";
+//     }
+//     std::cout << std::endl;
+
+//     std::cout << myVector.capacity() << "  " << myVector.size() << std::endl;
+// }
 
 int main()
 {
-    ft::vector<int> sourceVector;
-    sourceVector.push_back(4);
-    sourceVector.push_back(5);
-    sourceVector.push_back(6);
-    ft::vector<int> myVector ;
-    myVector.push_back(1);
-    myVector.push_back(2);
-    myVector.push_back(3);
-    ft::vector<int>::iterator it = myVector.begin() + myVector.size();
+    {
+        ft::vector<std::string> v;
+        v.push_back("1");
+        v.push_back("0");
+        v.push_back("20");
+        v.push_back("4");
+        v.push_back("5");
+        ft::vector<std::string>::iterator it = v.begin() + 2;
 
-    myVector.insert(it, sourceVector.begin() + 1, sourceVector.end());
+        std::cout << "Vector before erase: ";
+        for (size_t i = 0; i < v.size(); i++)
+        {
+            std::cout << v[i] << " ";
+        }
+        std::cout << std::endl;
 
-    for (size_t i = 0;i <  myVector.size();i++) {
-        std::cout << myVector[i] << " ";
+        v.erase(it); // removes the element at position 2 (value 3)
+
+        std::cout << "Vector after erase: ";
+        for (size_t i = 0; i < v.size(); i++)
+        {
+            std::cout << v[i] << " ";
+        }
+        std::cout << std::endl;
+
+        return 0;
     }
-    std::cout<<std::endl;
-    return 0;
+    {
+        // system("leaks a.out");
+    }
 }
-
