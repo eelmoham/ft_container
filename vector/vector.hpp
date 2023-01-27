@@ -9,30 +9,31 @@ namespace ft
     template <class T>
     class vector
     {
-    private:
-        T *data;
-        size_t _size;
-        size_t _capacity;
-        std::allocator<T> alloc;
-
     public:
         typedef ft::iterator<T> iterator;
+        typedef T value_type;
+        typedef size_t size_type;
+        typedef T *pointer;
+        typedef const T *const_pointer;
+        typedef T &reference;
+        typedef const T &const_reference;
+
         vector() : _size(0), _capacity(0)
         {
             // this->data = NULL;
         }
 
-        vector(size_t n) : _size(n), _capacity(n)
+        vector(size_type n) : _size(n), _capacity(n)
         {
             this->data = alloc.allocate(n); // throw exception
-            for (size_t i = 0; i < this->_size; i++)
+            for (size_type i = 0; i < this->_size; i++)
                 this->alloc.construct(this->data + i, T());
         }
 
-        vector(size_t n, const T &val) : _size(n), _capacity(n)
+        vector(size_type n, const T &val) : _size(n), _capacity(n)
         {
             this->data = alloc.allocate(n); // throw exception
-            for (size_t i = 0; i < this->_size; i++)
+            for (size_type i = 0; i < this->_size; i++)
                 this->alloc.construct(this->data + i, val);
         }
 
@@ -41,9 +42,9 @@ namespace ft
             this->_size = cpy.size();
             this->_capacity = cpy.capacity();
             this->data = alloc.allocate(cpy.size()); // throw exception
-            for (size_t i = 0; i < this->_size; i++)
+            for (size_type i = 0; i < this->_size; i++)
                 this->alloc.construct(this->data + i, this->end());
-            for (size_t i = 0; i < this->_size; i++)
+            for (size_type i = 0; i < this->_size; i++)
                 this->alloc.construct(this->data + i, cpy[i]);
         }
 
@@ -61,12 +62,12 @@ namespace ft
             if (this->data)
                 this->alloc.deallocate(this->data, this->size());
             this->data = alloc.allocate(rhs.size()); // throw exception
-            for (size_t i = 0; i < this->_size; i++)
+            for (size_type i = 0; i < this->_size; i++)
                 this->alloc.construct(this->data + i, rhs[i]);
             return (*this);
         }
 
-        T &operator[](size_t index)
+        reference operator[](size_type index)
         {
             if (index < 0 || index > this->_size)
                 throw std::exception();
@@ -74,7 +75,7 @@ namespace ft
                 return this->data[index];
         }
 
-        const T &operator[](size_t index) const
+        const_reference operator[](size_type index) const
         {
             if (index < 0 || index > this->_size)
                 throw std::exception();
@@ -82,7 +83,7 @@ namespace ft
                 return this->data[index];
         }
 
-        T &at(size_t index)
+        reference at(size_type index)
         {
             if (index < 0 || index > this->_size)
                 throw std::exception();
@@ -90,7 +91,7 @@ namespace ft
                 return this->data[index];
         }
 
-        const T &at(size_t index) const
+        const_reference at(size_t index) const
         {
             if (index < 0 || index > this->_size)
                 throw std::exception();
@@ -98,27 +99,21 @@ namespace ft
                 return this->data[index];
         }
 
-        T &front()
+        const_reference front()
         {
             if (this->size() < 1)
                 throw std::exception();
             return this->data[0];
         }
 
-        const T &front() const
+        const_reference front() const
         {
             if (this->size() < 1)
                 throw std::exception();
             return this->data[0];
         }
-        T &back()
-        {
-            if (this->data[this->_size - 1])
-                return this->data[this->_size - 1];
-            else
-                throw std::exception();
-        }
-        const T &back() const
+
+        reference back()
         {
             if (this->data[this->_size - 1])
                 return this->data[this->_size - 1];
@@ -126,8 +121,15 @@ namespace ft
                 throw std::exception();
         }
 
-        // // Iterators
-        iterator begin() 
+        const_reference back() const
+        {
+            if (this->data[this->_size - 1])
+                return this->data[this->_size - 1];
+            else
+                throw std::exception();
+        }
+
+        iterator begin()
         {
             if (this->_size)
                 return iterator(this->data, 0);
@@ -167,17 +169,17 @@ namespace ft
                 return true;
         }
 
-        size_t size() const
+        size_type size() const
         {
             return this->_size;
         }
 
-        size_t capacity() const
+        size_type capacity() const
         {
             return this->_capacity;
         }
 
-        void reserve(size_t n)
+        void reserve(size_type n)
         {
             if (this->_size == 0 && this->_capacity == 0)
             {
@@ -186,20 +188,20 @@ namespace ft
             }
             else if (n < this->_size)
             {
-                for (size_t i = n; i < this->_capacity; i++)
+                for (size_type i = n; i < this->_capacity; i++)
                     this->alloc.destroy(this->data + i);
             }
             else
             {
-                T *tmp = this->alloc.allocate(n);
-                for (size_t i = 0; i < this->_size; i++)
+                pointer tmp = this->alloc.allocate(n);
+                for (size_type i = 0; i < this->_size; i++)
                 {
                     this->alloc.construct(tmp + i, this->data[i]);
                     this->alloc.destroy(this->data + i);
                 }
                 this->alloc.deallocate(this->data, this->size());
                 this->data = this->alloc.allocate(n);
-                for (size_t i = 0; i < n; i++)
+                for (size_type i = 0; i < n; i++)
                 {
                     this->alloc.construct(this->data + i, tmp[i]);
                     this->alloc.destroy(tmp + i);
@@ -212,7 +214,7 @@ namespace ft
         {
             if (this->_capacity > this->_size)
             {
-                for (size_t i = this->_size; i < this->_capacity; i++)
+                for (size_type i = this->_size; i < this->_capacity; i++)
                     this->alloc.destroy(this->data + i);
             }
             this->_capacity = this->_size;
@@ -221,14 +223,14 @@ namespace ft
         // // Modifiers
         void clear()
         {
-            for (size_t i = 0; i < this->_size; i++)
+            for (size_type i = 0; i < this->_size; i++)
                 this->alloc.destroy(this->data + i);
             this->_size = 0;
         }
 
-        iterator insert(iterator it, const T &val)
+        iterator insert(iterator position, const value_type &val)
         {
-            T *tmp = this->alloc.allocate(_size);
+            pointer tmp = this->alloc.allocate(_size);
             for (size_t i = 0; i < this->_size; i++)
             {
                 this->alloc.construct(tmp + i, this->data[i]);
@@ -242,7 +244,7 @@ namespace ft
             int index = 0;
             for (iterator i = this->begin(); i != this->end(); ++i)
             {
-                if (it == i)
+                if (position == i)
                     *i = val;
                 else
                 {
@@ -252,11 +254,12 @@ namespace ft
                 }
             }
             this->alloc.deallocate(tmp, _size - 1);
-            return it;
+            return position;
         }
-        void insert(iterator it, size_t n, const T &val)
+
+        void insert(iterator position, size_type n, const value_type &val)
         {
-            T *tmp = this->alloc.allocate(_size);
+            pointer tmp = this->alloc.allocate(_size);
             for (size_t i = 0; i < this->_size; i++)
             {
                 this->alloc.construct(tmp + i, this->data[i]);
@@ -270,7 +273,7 @@ namespace ft
             int index = 0;
             for (iterator i = this->begin(); i != this->end(); ++i)
             {
-                if (it == i)
+                if (position == i)
                 {
                     for (size_t j = 0; j < n; j++)
                     {
@@ -294,22 +297,22 @@ namespace ft
         void insert(iterator position, InputIterator first, InputIterator last)
         {
             InputIterator c = first;
-            size_t counter = 0;
+            size_type counter = 0;
             while (c++ != last)
                 counter++;
-            T *tmp = alloc.allocate(this->_size + counter);
+            pointer tmp = alloc.allocate(this->_size + counter);
             int index = 0;
-            for(iterator it = this->begin() ;it != position;++it)
+            for (iterator it = this->begin(); it != position; ++it)
             {
                 this->alloc.construct(tmp + index, *it);
                 index++;
             }
-            for(InputIterator it = first; it != last; ++it)
+            for (InputIterator it = first; it != last; ++it)
             {
                 this->alloc.construct(tmp + index, *it);
                 index++;
             }
-            for(iterator it = position ;it != this->end();++it)
+            for (iterator it = position; it != this->end(); ++it)
             {
                 this->alloc.construct(tmp + index, *it);
                 index++;
@@ -319,11 +322,12 @@ namespace ft
             this->data = this->alloc.allocate(_size);
             if (this->_size > this->_capacity)
                 this->_capacity *= 2;
-            for (size_t i = 0;i < this->_size;i++)
+            for (size_type i = 0; i < this->_size; i++)
                 this->alloc.construct(this->data + i, tmp[i]);
             this->alloc.deallocate(tmp, _size);
         }
-        void push_back(const T &val)
+
+        void push_back(const value_type &val)
         {
             this->reserve(this->_size + 1);
             this->alloc.construct(this->data + this->_size, val);
@@ -333,8 +337,8 @@ namespace ft
         }
         void pop_back()
         {
-            T *tmp = this->alloc.allocate(_size);
-            for (size_t i = 0; i < this->_size; i++)
+            pointer tmp = this->alloc.allocate(_size);
+            for (size_type i = 0; i < this->_size; i++)
             {
                 this->alloc.construct(tmp + i, this->data[i]);
                 this->alloc.destroy(this->data + i);
@@ -342,28 +346,36 @@ namespace ft
             this->alloc.deallocate(this->data, this->_size);
             _size--;
             this->data = this->alloc.allocate(this->_size);
-            for (size_t i = 0; i < this->_size; i++)
+            for (size_type i = 0; i < this->_size; i++)
             {
                 this->alloc.construct(this->data + i, tmp[i]);
                 this->alloc.destroy(tmp + i);
             }
             this->alloc.deallocate(tmp, _size + 1);
         }
-        void resize(size_t n)
+
+        void resize(size_type n, value_type val = value_type())
         {
-            for (size_t i = 0 ; i < n;i++)
-                this->pop_back();
-        }
-        void resize(size_t n, const T &val)
-        {
-            this->resize(n);
-            for (size_t i = 0 ; i < this->_size;i++)
+            if (n < this->_size)
             {
-                this->alloc.destroy(data + i);
-                this->alloc.construct(data + i, val);
+                reserve(n);
+                this->_size = n;
+            }
+            else if (n == this->_size)
+                return;
+            else
+            {
+                size_type sz = this->_size;
+                reserve(n);
+                this->_size = n;
+                for (size_type i = sz; i < this->_size; i++)
+                {
+                    this->alloc.destroy(data + i);
+                    this->alloc.construct(data + i, val);
+                }
             }
         }
-        iterator erase( iterator pos )
+        iterator erase(iterator pos)
         {
             for (iterator i = this->begin(); i != this->end(); ++i)
             {
@@ -377,7 +389,33 @@ namespace ft
             }
             return pos;
         }
-        iterator erase( iterator first, iterator last );
+        iterator erase(iterator first, iterator last)
+        {
+            iterator it = first;
+            size_type count = 0;
+            while (++it)
+                count++;
+            pointer tmp = this->alloc.allocate(this->_size - count);
+            size_type index = 0;
+            iterator it;
+            for (it = this->begin(); it != first; ++it)
+            {
+                this->alloc.construct(tmp + index, *it);
+                index++;
+            }
+            while (++it != last);
+            for (it != end(); ++it)
+            {
+                this->alloc.construct(tmp + index, *it);
+                index++;
+            }
+        }
+
+    private:
+        value_type *data;
+        size_type _size;
+        size_type _capacity;
+        std::allocator<T> alloc;
     };
 };
 
@@ -397,10 +435,6 @@ vector( vector&& other, const Allocator& alloc );
 
 vector( std::initializer_list<T> init, const Allocator& alloc = Allocator() );
 */
-
-
-
-
 
 /*
 
