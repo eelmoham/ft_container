@@ -16,23 +16,18 @@ int main()
         {
             std::cout << v2[i] << " ";
         }
-        std::cout << std::endl;
-
-        v2.resize(8, "c"); // adds 3 elements to the vector with value -1
-
+        std::cout <<'\n'<<v2.size()<< std::endl;
+        ft::vector<std::string>::iterator x = v2.erase(v2.begin() + 2, v2.end() -2);
+        std::cout << "done : " <<*x << std::endl;
         std::cout << "Vector vv after resize: ";
         for (size_t i = 0; i < v2.size(); i++)
         {
             std::cout << v2[i] << " ";
         }
-        std::cout << std::endl;
+        std::cout <<'\n'<<v2.size()<< std::endl;
     }
     {
         // system("leaks a.out");
     }
 }
 
-// Vector v before resize: 1 2 3 4 5
-// Vector v after resize: 1 2 3
-// Vector vv before resize: 1 2 3 4 5
-// Vector vv after resize: 1 2 3 4 5 -1 -1 -1
