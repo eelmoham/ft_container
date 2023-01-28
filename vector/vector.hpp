@@ -402,7 +402,9 @@ namespace ft
                 this->alloc.destroy(tmp + i);
             }
             this->alloc.deallocate(tmp, this->_size);
-            return pos;
+            if (pos == this->end())
+                return pos;
+            return ++pos;
         }
 
         iterator erase(iterator first, iterator last)
@@ -414,8 +416,9 @@ namespace ft
                         this->erase(it);
                     break;
                 }
-                
-            return last;
+            if (last == this->end())
+                return last;
+            return first;
         }
 
     private:
