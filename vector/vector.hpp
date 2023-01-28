@@ -17,6 +17,7 @@ namespace ft
         typedef const T *const_pointer;
         typedef T &reference;
         typedef const T &const_reference;
+        typedef std::reverse_iterator<T> reverse_iterator;
 
         vector() : _size(0), _capacity(0)
         {
@@ -30,7 +31,7 @@ namespace ft
                 this->alloc.construct(this->data + i, T());
         }
 
-        vector(size_type n, const T &val) : _size(n), _capacity(n)
+        vector(size_type n, const_reference val) : _size(n), _capacity(n)
         {
             this->data = alloc.allocate(n); // throw exception
             for (size_type i = 0; i < this->_size; i++)

@@ -5,6 +5,7 @@
 int main()
 {
     {
+        std::receive_iterator<std::string> it;
         std::vector<std::string> v2;
         v2.push_back("1");
         v2.push_back("2");
