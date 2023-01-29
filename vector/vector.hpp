@@ -2,8 +2,8 @@
 #define VECTOR_HPP
 
 #include <iostream>
-#include "iterator.hpp"
 #include "reverse_iterator.hpp"
+#include "iterator.hpp"
 
 namespace ft
 {
@@ -11,14 +11,14 @@ namespace ft
     class vector
     {
     public:
-        typedef ft::iterator<T> iterator;
+        typedef typename ft::iterator<T> iterator;
         typedef T value_type;
         typedef size_t size_type;
         typedef T *pointer;
         typedef const T *const_pointer;
         typedef T &reference;
         typedef const T &const_reference;
-        typedef ft::reverse_iterator<T> reverse_iterator;
+        typedef typename ft::reverse_iterator<iterator> reverse_iterator;
         // typedef ft::iterator_traits<T> iterator_traits;
         vector() : _size(0), _capacity(0)
         {
