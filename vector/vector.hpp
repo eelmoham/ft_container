@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "iterator.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -17,8 +18,8 @@ namespace ft
         typedef const T *const_pointer;
         typedef T &reference;
         typedef const T &const_reference;
-        typedef std::reverse_iterator<T> reverse_iterator;
-
+        typedef ft::reverse_iterator<T> reverse_iterator;
+        // typedef ft::iterator_traits<T> iterator_traits;
         vector() : _size(0), _capacity(0)
         {
             // this->data = NULL;
@@ -423,7 +424,7 @@ namespace ft
         }
 
     private:
-        value_type *data;
+        pointer data;
         size_type _size;
         size_type _capacity;
         std::allocator<T> alloc;
