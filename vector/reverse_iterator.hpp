@@ -1,6 +1,7 @@
 #ifndef REVERSE_ITERATOR_HPP
 #define REVERSE_ITERATOR_HPP
 #include "iterator_traits.hpp"
+#include "iterator.hpp"
 namespace ft
 {
 
@@ -20,10 +21,10 @@ namespace ft
         template <class Iter>
         reverse_iterator(const reverse_iterator<Iter>& rev_it) : current(rev_it.base()) {}
         iterator_type base() const { return this->current; }
-        typename std::iterator_traits<Iterator>::value_type operator*() const
+        reference operator*() const
         {
             Iterator tmp = current;
-            return *--tmp;
+            return *(tmp - 1);
         }
         reverse_iterator operator+(difference_type n) const
         {
