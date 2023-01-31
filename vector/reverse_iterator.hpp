@@ -16,21 +16,21 @@ namespace ft
         typedef typename ft::iterator_traits<Iterator>::reference reference;
 
         reverse_iterator() : current() {}
-        reverse_iterator(Iterator x) : current(x) {}
         explicit reverse_iterator(iterator_type it) : current(it) {}
         template <class Iter>
-        reverse_iterator(const reverse_iterator<Iter> &rev_it) : current(rev_it.base()) {}
-        iterator_type base() const { return current; }
-        reference operator*() const
+        reverse_iterator(const reverse_iterator<Iter>& rev_it) : current(rev_it.base()) {}
+        iterator_type base() const { return this->current; }
+        typename std::iterator_traits<Iterator>::value_type operator*() const
         {
             Iterator tmp = current;
             return *--tmp;
         }
-        
-
+        reverse_iterator operator+(difference_type n) const
+        {
+            return reverse_iterator(current - n);
+        }
     private:
         Iterator current;
     };
 }
-
 #endif

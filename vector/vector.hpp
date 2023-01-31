@@ -54,7 +54,11 @@ namespace ft
         {
             // std::cout << "done" << std::endl;
             if (this->data != nullptr)
-                this->alloc.deallocate(this->data, this->size());
+            {
+                for (size_type i = 0; i < this->_size;i++)
+                    this->alloc.destroy(this->data + i);
+                this->alloc.deallocate(this->data, this->_size);
+            }
         }
 
         vector &operator=(const vector &rhs)
@@ -377,7 +381,7 @@ namespace ft
                 }
             }
         }
-
+        
         iterator erase(iterator pos) //try recode it with smart code
         {
             pointer tmp = this->alloc.allocate(_size - 1);
@@ -423,6 +427,14 @@ namespace ft
             return first;
         }
 
+        reverse_iterator rbegin()
+        {
+            return reverse_iterator(this->end());
+        }
+        reverse_iterator rend()
+        {
+            return reverse_iterator(this->begin());
+        }
     private:
         pointer data;
         size_type _size;
