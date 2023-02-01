@@ -19,11 +19,8 @@ namespace ft
         typedef T &reference;
         typedef const T &const_reference;
         typedef typename ft::reverse_iterator<iterator> reverse_iterator;
-        // typedef ft::iterator_traits<T> iterator_traits;
-        vector() : _size(0), _capacity(0)
-        {
-            // this->data = NULL;
-        }
+        typedef typename std::allocator<T> allocator_type;
+        vector() : _size(0), _capacity(0){}
 
         vector(size_type n) : _size(n), _capacity(n)
         {
@@ -52,7 +49,6 @@ namespace ft
 
         ~vector()
         {
-            // std::cout << "done" << std::endl;
             if (this->data != nullptr)
             {
                 for (size_type i = 0; i < this->_size;i++)
@@ -166,7 +162,6 @@ namespace ft
                 throw std::exception();
         }
 
-        // // Capacity
         bool empty() const
         {
             if (this->_size)
@@ -226,7 +221,6 @@ namespace ft
             this->_capacity = this->_size;
         }
 
-        // // Modifiers
         void clear()
         {
             for (size_type i = 0; i < this->_size; i++)
@@ -439,7 +433,7 @@ namespace ft
         pointer data;
         size_type _size;
         size_type _capacity;
-        std::allocator<T> alloc;
+        allocator_type alloc;
     };
 };
 

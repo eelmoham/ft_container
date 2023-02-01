@@ -19,7 +19,7 @@ namespace ft
         reverse_iterator() : current() {}
         explicit reverse_iterator(iterator_type it) : current(it) {}
         template <class Iter>
-        reverse_iterator(const reverse_iterator<Iter>& rev_it) : current(rev_it.base()) {}
+        reverse_iterator(const reverse_iterator<Iter> &rev_it) : current(rev_it.base()) {}
         iterator_type base() const { return this->current; }
         reference operator*() const
         {
@@ -30,8 +30,62 @@ namespace ft
         {
             return reverse_iterator(current - n);
         }
+        reverse_iterator operator-(difference_type n) const
+        {
+            return reverse_iterator(current + n);
+        }
+
+        reverse_iterator operator++(int)
+        {
+            reverse_iterator temp(*this);
+            this->current -= 1;
+            return temp;
+        }
+
+        reverse_iterator operator++()
+        {
+            current -= 1;
+            return *this;
+        }
+
+        reverse_iterator operator--(int)
+        {
+            reverse_iterator temp(*this);
+            this->current += 1;
+            return temp;
+        }
+
+        reverse_iterator operator--()
+        {
+            current += 1;
+            return *this;
+        }
+
+        reverse_iterator& operator+= (difference_type n)
+        {
+            this->current -= n;
+            return (*this);
+        }
+
+        reverse_iterator& operator-= (difference_type n)
+        {
+            this->current += n;
+            return (*this);
+        }
+
+        pointer operator->() const
+        {
+            return &*current;
+        }
+
+        reference operator[](difference_type n)) const
+        {
+            return
+        }
     private:
         Iterator current;
     };
+    
+    //this claas implemented basic this standard lirary by ligacy version  (c++98)
 }
 #endif

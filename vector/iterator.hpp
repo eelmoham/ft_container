@@ -111,7 +111,6 @@ namespace ft
         {
             return index_ >= other.index_;
         }
-
     private:
         value_type *vec_;
         int index_;
