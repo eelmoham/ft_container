@@ -4,6 +4,7 @@
 #include <iostream>
 #include "reverse_iterator.hpp"
 #include "iterator.hpp"
+#include <limits>
 
 namespace ft
 {
@@ -432,9 +433,9 @@ namespace ft
 		{
 			return reverse_iterator(this->begin());
 		}
-		// size_type max_size() const{
-		// 	return std::numeric_limits<size_type>::max();
-		// }
+		size_type max_size() const{
+			return std::numeric_limits<size_type>::max();
+		}
 		template <class InputIterator>
 		void assign (InputIterator first, InputIterator last)
 		{
@@ -442,17 +443,13 @@ namespace ft
 			InputIterator it = first;
 			while (it++ != last)
 				counter++;
+			for (size_type i = 0; i < this->_size;i++)
+				this->alloc.destroy(this->data + i);
 			this->alloc.deallocate(this->data, this->_size);
-			this->data = this->alloc.allocate(counter);
-			int index = 0;
+			this->_capacity = 0;
+			this->_size = 0;
 			for (InputIterator iter = first; iter != last; ++iter)
-			{
-				this->alloc.construct(this->data + index, *iter);
-				index++;
-				this->_size++;
-				if (this->_size > this->_capacity)
-					this->_capacity *= 2;
-			}
+				this->push_back(*iter);
 		}
 	private:
 		pointer data;
