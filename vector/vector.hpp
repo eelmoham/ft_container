@@ -318,13 +318,16 @@ namespace ft
 				index++;
 			}
 			this->alloc.deallocate(this->data, this->_size);
-			this->_size += counter;
+			// this->_size += counter;
 			this->data = this->alloc.allocate(_size);
-			for (size_type i = 0; i < this->_size; i++)
+			for (size_type i = 0; i < counter; i++)
+			{
 				this->alloc.construct(this->data + i, tmp[i]);
-			this->alloc.deallocate(tmp, _size);
-			if (this->_size > this->_capacity)
-				this->_capacity *= 2;
+				this->_size++;
+				if (this->_size > this->_capacity)
+					this->_capacity *= 2;
+			}
+			this->alloc.deallocate(tmp, counter);
 		}
 
 		void push_back(const value_type &val)
@@ -429,13 +432,27 @@ namespace ft
 		{
 			return reverse_iterator(this->begin());
 		}
-		size_type max_size() const{
-			return std::numeric_limits<size_type>::max();
-		}
+		// size_type max_size() const{
+		// 	return std::numeric_limits<size_type>::max();
+		// }
 		template <class InputIterator>
 		void assign (InputIterator first, InputIterator last)
 		{
-			this->insert(this->begin(), first, last);	
+			int counter = 0;
+			InputIterator it = first;
+			while (it++ != last)
+				counter++;
+			this->alloc.deallocate(this->data, this->_size);
+			this->data = this->alloc.allocate(counter);
+			int index = 0;
+			for (InputIterator iter = first; iter != last; ++iter)
+			{
+				this->alloc.construct(this->data + index, *iter);
+				index++;
+				this->_size++;
+				if (this->_size > this->_capacity)
+					this->_capacity *= 2;
+			}
 		}
 	private:
 		pointer data;

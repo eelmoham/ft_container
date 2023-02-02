@@ -21,13 +21,13 @@ int main()
         v.push_back("mehdi3");
         v.push_back("mehdi4");
         v.push_back("mehdi5");
-        v.push_back("mehdi5");
+        // v.push_back("mehdi5");
         v2.assign(v.begin(), v.end());
 
         for (size_t i = 0; i < v2.size();i++)
-            std::cout << "*> " <<v2[i] << std::endl;
+            std::cout << "*> " <<v2[i] <<std::endl;
 
-        std::cout << v2.size() << "  " << v2.capacity() << "\n";
+        // std::cout << v2.size() << "  " << v2.capacity() << "\n";
 
     }
     {
