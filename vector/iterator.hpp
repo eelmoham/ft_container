@@ -111,6 +111,7 @@ namespace ft
         {
             return index_ >= other.index_;
         }
+        ~iterator(){}
     private:
         value_type *vec_;
         int index_;

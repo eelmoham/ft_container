@@ -44,7 +44,7 @@ namespace ft
 
         reverse_iterator operator++()
         {
-            current -= 1;
+            this->current -= 1;
             return *this;
         }
 
@@ -57,7 +57,7 @@ namespace ft
 
         reverse_iterator operator--()
         {
-            current += 1;
+            this->current += 1;
             return *this;
         }
 
@@ -75,17 +75,18 @@ namespace ft
 
         pointer operator->() const
         {
-            return &*current;
+            return &*this->current;
         }
 
-        reference operator[](difference_type n)) const
+        reference operator[](difference_type n) const
         {
-            return
+            return *(*this + n);
         }
+
+        ~reverse_iterator(){}
     private:
-        Iterator current;
+        iterator_type current;
     };
     
-    //this claas implemented basic this standard lirary by ligacy version  (c++98)
 }
 #endif
