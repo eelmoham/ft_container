@@ -5,10 +5,9 @@
 #include "reverse_iterator.hpp"
 #include "iterator.hpp"
 #include <limits>
-
 namespace ft
 {
-	template <class T>
+	template <class T, class Alloc = std::allocator<T>>
 	class vector
 	{
 	public:
@@ -19,9 +18,9 @@ namespace ft
 		typedef const T *const_pointer;
 		typedef T &reference;
 		typedef const T &const_reference;
+		typedef typename std::allocator<value_type> allocator_type;
 		typedef typename ft::reverse_iterator<iterator> reverse_iterator;
-		typedef typename std::allocator<T> allocator_type;
-		vector() : _size(0), _capacity(0){}
+		vector() : _size(0), _capacity(0) {}
 
 		vector(size_type n) : _size(n), _capacity(n)
 		{
@@ -30,7 +29,7 @@ namespace ft
 				this->alloc.construct(this->data + i, T());
 		}
 
-		vector(size_type n, const_reference val) : _size(n), _capacity(n)
+		explicit vector(size_type n, const_reference val) : _size(n), _capacity(n)
 		{
 			this->data = alloc.allocate(n); // throw exception
 			for (size_type i = 0; i < this->_size; i++)
@@ -52,7 +51,7 @@ namespace ft
 		{
 			if (this->data != nullptr)
 			{
-				for (size_type i = 0; i < this->_size;i++)
+				for (size_type i = 0; i < this->_size; i++)
 					this->alloc.destroy(this->data + i);
 				this->alloc.deallocate(this->data, this->_size);
 			}
@@ -379,20 +378,20 @@ namespace ft
 				}
 			}
 		}
-		
-		iterator erase(iterator pos) //try recode it with smart code
+
+		iterator erase(iterator pos) // try recode it with smart code
 		{
 			pointer tmp = this->alloc.allocate(_size - 1);
 			int index = 0;
-			for (iterator i = this->begin();i != this->end();++i)
+			for (iterator i = this->begin(); i != this->end(); ++i)
 			{
-				if(i == pos)
+				if (i == pos)
 					continue;
 				this->alloc.construct(tmp + index, *i);
 				index++;
 			}
 			int i = 0;
-			while(i < this->_size)
+			while (i < this->_size)
 			{
 				this->alloc.destroy(data + i);
 				i++;
@@ -413,10 +412,10 @@ namespace ft
 
 		iterator erase(iterator first, iterator last)
 		{
-			for(iterator it = this->begin();it != this->end();++it)
+			for (iterator it = this->begin(); it != this->end(); ++it)
 				if (it == first)
 				{
-					for(iterator i = first;i != last;++i)
+					for (iterator i = first; i != last; ++i)
 						this->erase(it);
 					break;
 				}
@@ -433,17 +432,18 @@ namespace ft
 		{
 			return reverse_iterator(this->begin());
 		}
-		size_type max_size() const{
-			return std::numeric_limits<size_type>::max();
+		size_type max_size() const
+		{
+			return this->alloc.max_size();
 		}
 		template <class InputIterator>
-		void assign (InputIterator first, InputIterator last)
+		void assign(InputIterator first, InputIterator last)
 		{
 			int counter = 0;
 			InputIterator it = first;
 			while (it++ != last)
 				counter++;
-			for (size_type i = 0; i < this->_size;i++)
+			for (size_type i = 0; i < this->_size; i++)
 				this->alloc.destroy(this->data + i);
 			this->alloc.deallocate(this->data, this->_size);
 			this->_capacity = 0;
@@ -451,6 +451,14 @@ namespace ft
 			for (InputIterator iter = first; iter != last; ++iter)
 				this->push_back(*iter);
 		}
+
+		void swap(vector &other)
+		{
+			std::swap(this->_size, other._size);
+			std::swap(this->_capacity, other._capacity);
+			std::swap(this->data, other.data);
+		}
+
 	private:
 		pointer data;
 		size_type _size;
