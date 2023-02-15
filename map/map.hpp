@@ -4,13 +4,13 @@
 
 namespace ft
 {
-    template <class Key, class T, class Compare = less<Key>, class Alloc = allocator<pair<const Key, T>>>
+    template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key, T>>>
     class map
     {
     public:
         typedef Key key_type;
         typedef T mapped_type;
-        typedef pair<const Key, T> value_type;
+        typedef std::pair<const Key, T> value_type;
         typedef Compare key_compare;
         typedef Alloc allocator_type;
         typedef value_type &reference;
@@ -42,7 +42,7 @@ namespace ft
         map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
 
         map(const map &x);
-    }
-}
+    };
+};
 
 #endif
