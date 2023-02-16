@@ -23,24 +23,20 @@ namespace ft
         {
             value_type value;
             Node *left, *right;
-            Node(const value_type &v) : value(v), left(nullptr), right(nullptr) {}
+            // Node(const value_type &v) : value(v), left(nullptr), right(nullptr) {}
         };
-
         Node *root;
         allocator_type alloc;
         key_compare cmp;
         size_t size;
-
     public:
         explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
         {
             this->cmp = comp;
             this->root = this->alloc.allocate
-
         }
         template <class InputIterator>
         map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
-
         map(const map &x);
     };
 };
