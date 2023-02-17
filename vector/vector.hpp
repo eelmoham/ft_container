@@ -452,6 +452,11 @@ namespace ft
 				this->push_back(*iter);
 		}
 
+		void assign (size_type n, const value_type& val)
+		{
+			
+		}
+
 		void swap(vector &other)
 		{
 			std::swap(this->_size, other._size);
