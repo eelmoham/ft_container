@@ -187,7 +187,7 @@ namespace ft
 				this->data = alloc.allocate(n);
 				this->_capacity = n;
 			}
-			else if (n < this->_size)
+			else if (n < this->_size) // <=
 			{
 				for (size_type i = n; i < this->_capacity; i++)
 					this->alloc.destroy(this->data + i);
@@ -208,6 +208,7 @@ namespace ft
 					this->alloc.destroy(tmp + i);
 				}
 				this->alloc.deallocate(tmp, n);
+				// this.
 			}
 		}
 
@@ -432,29 +433,41 @@ namespace ft
 		{
 			return reverse_iterator(this->begin());
 		}
+
 		size_type max_size() const
 		{
 			return this->alloc.max_size();
 		}
-		template <class InputIterator>
-		void assign(InputIterator first, InputIterator last)
-		{
-			int counter = 0;
-			InputIterator it = first;
-			while (it++ != last)
-				counter++;
-			for (size_type i = 0; i < this->_size; i++)
-				this->alloc.destroy(this->data + i);
-			this->alloc.deallocate(this->data, this->_size);
-			this->_capacity = 0;
-			this->_size = 0;
-			for (InputIterator iter = first; iter != last; ++iter)
-				this->push_back(*iter);
-		}
+
+		// template <class InputIterator>
+		// void assign(InputIterator first, InputIterator last)
+		// {
+		// 	int counter = 0;
+		// 	InputIterator it = first;
+		// 	while (it++ != last)
+		// 		counter++;
+		// 	for (size_type i = 0; i < this->_size; i++)
+		// 		this->alloc.destroy(this->data + i);
+		// 	this->alloc.deallocate(this->data, this->_size);
+		// 	this->_capacity = 0;
+		// 	this->_size = 0;
+		// 	for (InputIterator iter = first; iter != last; ++iter)
+		// 		this->push_back(*iter);
+		// }
 
 		void assign (size_type n, const value_type& val)
 		{
-			
+			if (n <= this->_size)
+			{
+				for (size_type i = 0; i < n ;i++)
+					this->data[i] = val;
+			}
+			else
+			{
+				this->reserve(n);
+				for (size_type i = 0; i < n ;i++)
+					this->data[i] = val;
+			}
 		}
 
 		void swap(vector &other)
