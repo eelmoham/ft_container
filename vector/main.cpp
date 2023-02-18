@@ -6,8 +6,8 @@
 int main()
 {
     {
-        ft::vector<int> v;
-        ft::vector<int> v2;
+        std::vector<int> v;
+        std::vector<int> v2;
         v.push_back(1);
         v.push_back(1);
         v.push_back(1);
