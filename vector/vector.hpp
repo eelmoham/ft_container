@@ -5,6 +5,7 @@
 #include "reverse_iterator.hpp"
 #include "iterator.hpp"
 #include <limits>
+#include "enable_if.hpp"
 namespace ft
 {
 	template <class T, class Alloc = std::allocator<T> >
@@ -187,7 +188,7 @@ namespace ft
 				this->data = alloc.allocate(n);
 				this->_capacity = n;
 			}
-			else if (n < this->_size) // <=
+			else if (n < this->_size)
 			{
 				for (size_type i = n; i < this->_capacity; i++)
 					this->alloc.destroy(this->data + i);
@@ -208,7 +209,7 @@ namespace ft
 					this->alloc.destroy(tmp + i);
 				}
 				this->alloc.deallocate(tmp, n);
-				// this.
+				this->_capacity = n;
 			}
 		}
 
@@ -439,22 +440,25 @@ namespace ft
 			return this->alloc.max_size();
 		}
 
-		// template <class InputIterator>
-		// void assign(InputIterator first, InputIterator last)
-		// {
-		// 	int counter = 0;
-		// 	InputIterator it = first;
-		// 	while (it++ != last)
-		// 		counter++;
-		// 	for (size_type i = 0; i < this->_size; i++)
-		// 		this->alloc.destroy(this->data + i);
-		// 	this->alloc.deallocate(this->data, this->_size);
-		// 	this->_capacity = 0;
-		// 	this->_size = 0;
-		// 	for (InputIterator iter = first; iter != last; ++iter)
-		// 		this->push_back(*iter);
-		// }
+		template <typename InputIterator>
+  		typename ft::enable_if<std::is_integral<typename std::iterator_traits<InputIterator>::value_type>::value, void>::type
+		void assign(InputIterator first, InputIterator last)
+		{
+			int counter = 0;
+			InputIterator it = first;
+			while (it++ != last)
+				counter++;
+			for (size_type i = 0; i < this->_size; i++)
+				this->alloc.destroy(this->data + i);
+			this->alloc.deallocate(this->data, this->_size);
+			this->_capacity = 0;
+			this->_size = 0;
+			for (InputIterator iter = first; iter != last; ++iter)
+				this->push_back(*iter);
+		}
 
+		template <typename T>
+  		typename ft::enable_if<std::is_integral<T>::value, void>::type
 		void assign (size_type n, const value_type& val)
 		{
 			if (n <= this->_size)
