@@ -16,9 +16,9 @@ int main()
 		v2.push_back(2);
 		
 		
-		// v.assign(v2.begin() + 1, v2.end());
-
+		v.assign(v2.begin() + 1, v2.end());
 		v.assign(6, 0);
+
 		// v.reserve(6);
 
 		for (size_t i = 0;i < v.size();i++)
@@ -33,3 +33,5 @@ int main()
 		// system("leaks vec");
 	}
 }
+
+template < class Key,  class T, class Compare = less<Key>,  class Alloc = allocator<pair<const Key,T> > > class map;

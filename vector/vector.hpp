@@ -440,9 +440,9 @@ namespace ft
 			return this->alloc.max_size();
 		}
 
+  		// typename ft::enable_if<std::is_integral<typename ft::iterator_traits<InputIterator>::value_type>::value, void>::type
 		template <typename InputIterator>
-  		typename ft::enable_if<std::is_integral<typename std::iterator_traits<InputIterator>::value_type>::value, void>::type
-		void assign(InputIterator first, InputIterator last)
+		void assign(typename ft::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 		{
 			int counter = 0;
 			InputIterator it = first;
@@ -457,9 +457,8 @@ namespace ft
 				this->push_back(*iter);
 		}
 
-		template <typename T>
-  		typename ft::enable_if<std::is_integral<T>::value, void>::type
-		void assign (size_type n, const value_type& val)
+  		// typename ft::enable_if<std::is_integral<U>::value, void>::type
+		void assign (typename ft::enable_if<std::is_integral<size_type>::value, size_type>::type n, const value_type& val)
 		{
 			if (n <= this->_size)
 			{
